@@ -1,0 +1,201 @@
+import { test, expect } from '@playwright/test';
+import { EditRulePage } from '../pages/EditRulePage';
+
+test.describe('Edit Rule Page Tests', () => {
+  let editRulePage: EditRulePage;
+
+  test.beforeEach(async ({ page }) => {
+    editRulePage = new EditRulePage(page);
+    await editRulePage.navigateToEditRule();
+  });
+
+  test('Verify page components for Edit Rule', async () => {
+    // Verify title contains "Edit Rule"
+    await expect(editRulePage.pageTitle).toContainText('Edit rule');
+    
+    // Verify Rule name input field is present and filled
+    await expect(editRulePage.ruleNameInput).toBeVisible();
+    await editRulePage.verifyRuleNameInputFilled();
+    
+    // Verify Description input is present
+    await expect(editRulePage.ruleDescriptionTextarea).toBeVisible();
+    
+    // Verify Risk category dropdown is present
+    await expect(editRulePage.riskCategoryDropdown).toBeVisible();
+    
+    // Verify Condition component is present
+    await expect(editRulePage.conditionsSection).toBeVisible();
+    
+    // Verify Outcome component is present
+    await expect(editRulePage.outcomeSection).toBeVisible();
+    
+    // Verify Linked rule sets component is present
+    await expect(editRulePage.linkedRuleSetsSection).toBeVisible();
+    
+    // Verify Rule sets dropdown is present
+    await expect(editRulePage.linkedRuleSetsDropdown).toBeVisible();
+    
+    // Verify Save and Cancel buttons are present
+    await expect(editRulePage.saveButton).toBeVisible();
+    await expect(editRulePage.cancelButton).toBeVisible();
+  });
+
+  test('Verify Rule Name validations for Edit Rule', async () => {
+    // Test 1: Empty rule name validation
+    // Empty the rule name
+    await editRulePage.clearRuleName();
+    
+    // Click save
+    await editRulePage.saveRule();
+    
+    // Verify required field error appears
+    await editRulePage.verifyRequiredFieldError();
+    
+    // Verify save validation alert appears
+    await editRulePage.verifySaveValidationAlert();
+    
+    // Test 2: Rule name too long validation
+    // Enter more than 75 characters in the rule name
+    await editRulePage.fillRuleNameWithLongText(80);
+    
+    // Click save
+    await editRulePage.saveRule();
+    
+    // Verify max length error appears
+    await editRulePage.verifyMaxLengthError();
+    
+    // Verify save validation alert still appears
+    await editRulePage.verifySaveValidationAlert();
+  });
+
+  test('Verify Description Field validations for Edit Rule', async () => {
+    // Change the rule name first
+    await editRulePage.fillRuleName('Updated Rule Name');
+    
+    // Empty the description
+    await editRulePage.clearRuleDescription();
+    
+    // Input a new description with more than 400 chars (but error shows at 300+)
+    await editRulePage.fillRuleDescriptionWithLongText(450);
+    
+    // Verify the error message appears
+    await editRulePage.verifyDescriptionMaxLengthError();
+    
+    // Click save
+    await editRulePage.saveRule();
+    
+    // Verify the alert box is displayed
+    await editRulePage.verifySaveValidationAlert();
+    
+    // Add a description less than 400 chars
+    await editRulePage.fillRuleDescription('This is a valid description that is under 300 characters long and should be accepted by the form validation.');
+    
+    // Click save
+    await editRulePage.saveRule();
+    
+    // Verify the URL is changed to /rules
+    await expect(editRulePage.page).toHaveURL(/.*\/rules$/);
+  });
+
+  test('Verify Risk Category Dropdown for Edit Rule', async () => {
+    // Change the rule name
+    await editRulePage.fillRuleName('Updated Rule Name for Risk Category Test');
+    
+    // Click on the risk category dropdown
+    await editRulePage.clickRiskCategoryDropdown();
+    
+    // Check all risk categories are present in the dropdown
+    await editRulePage.verifyAllRiskCategoriesPresent();
+    
+    // Click on the same risk category that was selected
+    await editRulePage.clickCurrentlySelectedRiskCategory();
+    
+    // Now there is no risk category selected
+    await editRulePage.verifyNoRiskCategorySelected();
+    
+    // Click save
+    await editRulePage.saveRule();
+    
+    // Rule is saved - verify URL changes to /rules
+    await expect(editRulePage.page).toHaveURL(/.*\/rules$/);
+  });
+
+  test('Verify Linked Rule Sets Component for Edit Rule', async () => {
+    // Check rule name is filled
+    await editRulePage.verifyRuleNameInputFilled();
+    
+    // Check the linked rule set dropdown has a rule set selected in it
+    await editRulePage.verifyLinkedRuleSetSelected();
+    
+    // Click on the dropdown and select another rule set from the dropdown
+    await editRulePage.clickLinkedRuleSetsDropdown();
+    await editRulePage.selectAdditionalRuleSet();
+    
+    // Now the dropdown shows both rule sets
+    await editRulePage.verifyMultipleRuleSetsSelected();
+    
+    // Click on x button next to each rule set in the dropdown
+    await editRulePage.removeAllSelectedRuleSets();
+    
+    // Dropdown is empty
+    await editRulePage.verifyNoRuleSetsSelected();
+    
+    // Click save
+    await editRulePage.saveRule();
+    
+    // Verify URL changes to /rules (rule is saved successfully)
+    await expect(editRulePage.page).toHaveURL(/.*\/rules$/);
+  });
+
+  test('Verify Save Rule for Edit Rule', async () => {
+    // Check name is filled
+    await editRulePage.verifyRuleNameInputFilled();
+    
+    // Change the name
+    await editRulePage.fillRuleName('Updated Rule Name for Save Test');
+    
+    // Check description is filled
+    await editRulePage.verifyRuleDescriptionFilled();
+    
+    // Change the description
+    await editRulePage.fillRuleDescription('Updated description for save functionality test');
+    
+    // Change the risk category
+    await editRulePage.selectRiskCategory('Financial');
+    
+    // Click save
+    await editRulePage.saveRule();
+    
+    // Verify URL changes to /rules (rule is saved successfully)
+    await expect(editRulePage.page).toHaveURL(/.*\/rules$/);
+  });
+
+  test('Verify Cancel button modal for Edit rule', async () => {
+    // Change the name and description
+    await editRulePage.fillRuleName('Modified Rule Name for Cancel Test');
+    await editRulePage.fillRuleDescription('Modified description for cancel test');
+    
+    // Click Cancel - Modal should be triggered
+    await editRulePage.cancelEdit();
+    
+    // Check the modal is visible and has correct text
+    await editRulePage.verifyCancelModalVisible();
+    await editRulePage.verifyCancelModalText();
+    
+    // Check that modal has 2 buttons "Cancel" and "Continue without saving"
+    await editRulePage.verifyCancelModalButtons();
+    
+    // Click "Cancel" (Go back) - modal should be closed
+    await editRulePage.clickCancelModalGoBack();
+    await editRulePage.verifyCancelModalClosed();
+    
+    // Click cancel again
+    await editRulePage.cancelEdit();
+    
+    // Then click "Continue without saving"
+    await editRulePage.clickCancelModalContinue();
+    
+    // Rule is not saved - verify URL changes to /rules without saving changes
+    await expect(editRulePage.page).toHaveURL(/.*\/rules$/);
+  });
+});
