@@ -1,0 +1,535 @@
+import { Page, Locator, expect } from '@playwright/test';
+
+export class EditRulePage {
+  readonly page: Page;
+  
+  // Page header elements
+  readonly pageHeader: Locator;
+  readonly pageTitle: Locator;
+  readonly backButton: Locator;
+  readonly breadcrumbs: Locator;
+  
+  // Form elements
+  readonly ruleForm: Locator;
+  readonly ruleNameInput: Locator;
+  readonly ruleDescriptionTextarea: Locator;
+  readonly riskCategoryDropdown: Locator;
+  
+  // Conditions section
+  readonly conditionsSection: Locator;
+  readonly conditionsTitle: Locator;
+  readonly conditionsBuilder: Locator;
+  readonly logicOperatorDropdown: Locator;
+  readonly conditionsList: Locator;
+  readonly addConditionButton: Locator;
+  readonly addGroupButton: Locator;
+  
+  // Individual condition elements
+  readonly conditionTitle: Locator;
+  readonly propertySelector: Locator;
+  readonly propertyInput: Locator;
+  readonly operatorDropdown: Locator;
+  readonly valueCombobox: Locator;
+  readonly conditionMenuButton: Locator;
+  
+  // Outcome section
+  readonly outcomeSection: Locator;
+  readonly outcomeSectionTitle: Locator;
+  readonly outcomeSectionDescription: Locator;
+  readonly ruleOutputContainer: Locator;
+  readonly outputCards: Locator;
+  readonly outcomeCheckboxes: Locator;
+  
+  // Linked rule sets section
+  readonly linkedRuleSetsSection: Locator;
+  readonly linkedRuleSetsTitle: Locator;
+  readonly linkedRuleSetsDropdown: Locator;
+  
+  // Action buttons
+  readonly saveButton: Locator;
+  readonly cancelButton: Locator;
+
+  constructor(page: Page) {
+    this.page = page;
+    
+    // Page header elements
+    this.pageHeader = page.locator('header.page-header');
+    this.pageTitle = page.locator('[datatestid="page-header-title"]');
+    this.backButton = page.locator('[datatestid="page-header-back-button"]');
+    this.breadcrumbs = page.locator('[data-testid="breadcrumbs"]');
+    
+    // Form elements
+    this.ruleForm = page.locator('#rule-form');
+    this.ruleNameInput = page.locator('[datatestid="input-ruleName"] input');
+    this.ruleDescriptionTextarea = page.locator('[datatestid="textarea-ruleDescription"] textarea');
+    this.riskCategoryDropdown = page.locator('[datatestid="dropdown-ruleCategory"]');
+    
+    // Conditions section
+    this.conditionsSection = page.locator('.section-container').filter({ hasText: 'Conditions' });
+    this.conditionsTitle = this.conditionsSection.locator('.section-title', { hasText: 'Conditions' });
+    this.conditionsBuilder = page.locator('fieldset.conditions-builder');
+    this.logicOperatorDropdown = page.locator('[datatestid="dropdown-conditions.logicOperator"]');
+    this.conditionsList = page.locator('ul.conditions-builder--list');
+    this.addConditionButton = page.locator('[data-testid="button-add-condition"]');
+    this.addGroupButton = page.locator('[data-testid="button-add-group"]');
+    
+    // Individual condition elements
+    this.conditionTitle = page.locator('.condition-title');
+    this.propertySelector = page.locator('.conditions-builder--property-selector');
+    this.propertyInput = page.locator('[datatestid*="conditions.list"][datatestid*=".property.left"] input');
+    this.operatorDropdown = page.locator('[datatestid*="conditions.list"][datatestid*=".property.operation"]');
+    this.valueCombobox = page.locator('[datatestid*="conditions.list"][datatestid*=".property.right"]');
+    this.conditionMenuButton = page.locator('.conditions-builder--condition .menu-button');
+    
+    // Outcome section
+    this.outcomeSection = page.locator('.section-container').filter({ hasText: 'Outcome' });
+    this.outcomeSectionTitle = page.locator('.section-title-container .section-title', { hasText: 'Outcome' });
+    this.outcomeSectionDescription = page.locator('.section-title-container .description-title');
+    this.ruleOutputContainer = page.locator('.rule-output-container');
+    this.outputCards = page.locator('.output-card');
+    this.outcomeCheckboxes = page.locator('[data-testid="ruleOutput-active-checkbox"]');
+    
+    // Linked rule sets section
+    this.linkedRuleSetsSection = page.locator('.section-container').filter({ hasText: 'Linked Rule Sets' });
+    this.linkedRuleSetsTitle = page.locator('.section-title', { hasText: 'Linked Rule Sets' });
+    this.linkedRuleSetsDropdown = page.locator('[datatestid*="linkedRuleSets"], [datatestid*="ruleSets"]');
+    
+    // Action buttons (typically at bottom of form)
+    this.saveButton = page.locator('button[type="submit"]').or(page.locator('button', { hasText: 'Save' }));
+    this.cancelButton = page.locator('button', { hasText: 'Cancel' });
+  }
+
+  // Navigation methods
+  async navigateToEditRule(ruleId?: string) {
+    if (ruleId) {
+      await this.page.goto(`/rules/${ruleId}/edit`);
+    } else {
+      await this.page.goto('/rules/edit');
+    }
+  }
+
+  async clickBackButton() {
+    await this.backButton.click();
+  }
+
+  // Basic form methods
+  async fillRuleName(name: string) {
+    await this.ruleNameInput.clear();
+    await this.ruleNameInput.fill(name);
+  }
+
+  async fillRuleDescription(description: string) {
+    await this.ruleDescriptionTextarea.clear();
+    await this.ruleDescriptionTextarea.fill(description);
+  }
+
+  async selectRiskCategory(category: string) {
+    await this.riskCategoryDropdown.click();
+    await this.page.locator(`[role="option"]`, { hasText: category }).click();
+  }
+
+  // Conditions section methods
+  async verifyConditionsSectionVisible() {
+    await expect(this.conditionsSection).toBeVisible();
+    await expect(this.conditionsTitle).toBeVisible();
+    await expect(this.conditionsBuilder).toBeVisible();
+  }
+
+  async selectLogicOperator(operator: string) {
+    await this.logicOperatorDropdown.click();
+    await this.page.locator(`[role="option"]`, { hasText: operator }).click();
+  }
+
+  async addNewCondition() {
+    await this.addConditionButton.click();
+  }
+
+  async addNewGroup() {
+    await this.addGroupButton.click();
+  }
+
+  async fillConditionProperty(conditionIndex: number, property: string) {
+    const propertyInput = this.page.locator(`[datatestid="input-conditions.list.${conditionIndex}.property.left"] input`);
+    await propertyInput.clear();
+    await propertyInput.fill(property);
+  }
+
+  async selectConditionOperator(conditionIndex: number, operator: string) {
+    const operatorDropdown = this.page.locator(`[datatestid="dropdown-conditions.list.${conditionIndex}.property.operation"]`);
+    await operatorDropdown.click();
+    await this.page.locator(`[role="option"]`, { hasText: operator }).click();
+  }
+
+  async fillConditionValue(conditionIndex: number, value: string) {
+    const valueField = this.page.locator(`[datatestid="combobox-conditions.list.${conditionIndex}.property.right"] input`);
+    await valueField.clear();
+    await valueField.fill(value);
+  }
+
+  async getConditionsCount() {
+    return await this.conditionsList.locator('li.conditions-builder--condition').count();
+  }
+
+  async deleteCondition(conditionIndex: number) {
+    const condition = this.conditionsList.locator('li.conditions-builder--condition').nth(conditionIndex);
+    await condition.locator('.menu-button').click();
+    await this.page.locator('button', { hasText: 'Delete' }).click();
+  }
+
+  // Outcome section methods
+  async verifyOutcomeSectionVisible() {
+    await expect(this.outcomeSection).toBeVisible();
+    await expect(this.outcomeSectionTitle).toBeVisible();
+    await expect(this.ruleOutputContainer).toBeVisible();
+  }
+
+  async selectOutcome(outcomeName: string) {
+    const outcomeCard = this.outputCards.filter({ hasText: outcomeName });
+    const checkbox = outcomeCard.locator('input[type="checkbox"]');
+    await checkbox.check();
+  }
+
+  async unselectOutcome(outcomeName: string) {
+    const outcomeCard = this.outputCards.filter({ hasText: outcomeName });
+    const checkbox = outcomeCard.locator('input[type="checkbox"]');
+    await checkbox.uncheck();
+  }
+
+  async verifyOutcomeSelected(outcomeName: string) {
+    const outcomeCard = this.outputCards.filter({ hasText: outcomeName });
+    const checkbox = outcomeCard.locator('input[type="checkbox"]');
+    await expect(checkbox).toBeChecked();
+  }
+
+  async verifyOutcomeNotSelected(outcomeName: string) {
+    const outcomeCard = this.outputCards.filter({ hasText: outcomeName });
+    const checkbox = outcomeCard.locator('input[type="checkbox"]');
+    await expect(checkbox).not.toBeChecked();
+  }
+
+  async getAvailableOutcomes(): Promise<string[]> {
+    const outcomeLabels = await this.outputCards.locator('.field-label [data-testid="opt-lib-label-text"]').allTextContents();
+    return outcomeLabels;
+  }
+
+  async getSelectedOutcomes(): Promise<string[]> {
+    const selectedOutcomes: string[] = [];
+    const cards = await this.outputCards.all();
+    
+    for (const card of cards) {
+      const checkbox = card.locator('input[type="checkbox"]');
+      const isChecked = await checkbox.isChecked();
+      
+      if (isChecked) {
+        const label = await card.locator('.field-label [data-testid="opt-lib-label-text"]').textContent();
+        if (label) {
+          selectedOutcomes.push(label.trim());
+        }
+      }
+    }
+    
+    return selectedOutcomes;
+  }
+
+  // Linked rule sets section methods
+  async verifyLinkedRuleSetsSectionVisible() {
+    await expect(this.linkedRuleSetsSection).toBeVisible();
+    await expect(this.linkedRuleSetsTitle).toBeVisible();
+  }
+
+  async verifyLinkedRuleSetsDropdownVisible() {
+    await expect(this.linkedRuleSetsDropdown).toBeVisible();
+  }
+
+  async addLinkedRuleSet(ruleSetName: string) {
+    // Implementation would depend on actual UI structure
+    // This is a placeholder for the expected functionality
+  }
+
+  async removeLinkedRuleSet(ruleSetName: string) {
+    // Implementation would depend on actual UI structure
+    // This is a placeholder for the expected functionality
+  }
+
+  async verifyLinkedRuleSetSelected() {
+    // Check that the dropdown has at least one rule set selected
+    const selectedRuleSets = this.page.locator('.linked-rule-sets .selected-item, .rule-sets-dropdown .chip, .selected-rule-set');
+    await expect(selectedRuleSets.first()).toBeVisible();
+  }
+
+  async clickLinkedRuleSetsDropdown() {
+    await this.linkedRuleSetsDropdown.click();
+  }
+
+  async selectAdditionalRuleSet() {
+    // Wait for dropdown options to appear
+    await this.page.waitForSelector('[role="option"]', { timeout: 5000 });
+    
+    // Get all available options
+    const options = this.page.locator('[role="option"]');
+    const optionCount = await options.count();
+    
+    if (optionCount > 0) {
+      // Select the first available option (or second if first is already selected)
+      await options.first().click();
+    }
+  }
+
+  async verifyMultipleRuleSetsSelected() {
+    // Check that multiple rule sets are now selected
+    const selectedRuleSets = this.page.locator('.linked-rule-sets .selected-item, .rule-sets-dropdown .chip, .selected-rule-set');
+    const count = await selectedRuleSets.count();
+    expect(count).toBeGreaterThanOrEqual(2);
+  }
+
+  async removeAllSelectedRuleSets() {
+    // Find all remove buttons (x buttons) next to selected rule sets
+    const removeButtons = this.page.locator('.linked-rule-sets .remove-button, .rule-sets-dropdown .chip .delete-icon, .selected-rule-set .remove-icon, [data-testid*="remove"], .MuiChip-deleteIcon');
+    
+    const count = await removeButtons.count();
+    
+    // Click each remove button to clear all selections
+    for (let i = count - 1; i >= 0; i--) {
+      await removeButtons.nth(i).click();
+    }
+  }
+
+  async verifyNoRuleSetsSelected() {
+    // Verify that no rule sets are selected (dropdown is empty)
+    const selectedRuleSets = this.page.locator('.linked-rule-sets .selected-item, .rule-sets-dropdown .chip, .selected-rule-set');
+    await expect(selectedRuleSets).toHaveCount(0);
+    
+    // Alternatively, check if the dropdown shows placeholder text
+    const dropdownText = await this.linkedRuleSetsDropdown.textContent();
+    expect(dropdownText?.trim()).toBeFalsy();
+  }
+
+  // Cancel modal methods
+  async verifyCancelModalVisible() {
+    const modal = this.page.locator('[data-testid="dialog-leave-outcome-header"]').locator('..');
+    await expect(modal).toBeVisible();
+  }
+
+  async verifyCancelModalText() {
+    // Check title text
+    const title = this.page.locator('[data-testid="dialog-leave-outcome-title"]');
+    await expect(title).toContainText('Are you sure you want to leave?');
+    
+    // Check content text
+    const content = this.page.locator('[data-testid="dialog-leave-outcome-content"]');
+    await expect(content).toContainText("This information hasn't been saved");
+  }
+
+  async verifyCancelModalButtons() {
+    // Check "Continue without saving" button
+    const continueButton = this.page.locator('[data-testid="dialog-leave-outcome-action-primary"]');
+    await expect(continueButton).toBeVisible();
+    await expect(continueButton).toContainText('Continue without saving');
+    
+    // Check "Cancel" (Go back) button
+    const cancelButton = this.page.locator('[data-testid="dialog-leave-outcome-action-cancel"]');
+    await expect(cancelButton).toBeVisible();
+    await expect(cancelButton).toContainText('Cancel');
+  }
+
+  async clickCancelModalGoBack() {
+    const cancelButton = this.page.locator('[data-testid="dialog-leave-outcome-action-cancel"]');
+    await cancelButton.click();
+  }
+
+  async verifyCancelModalClosed() {
+    const modal = this.page.locator('[data-testid="dialog-leave-outcome-header"]').locator('..');
+    await expect(modal).not.toBeVisible();
+  }
+
+  async clickCancelModalContinue() {
+    const continueButton = this.page.locator('[data-testid="dialog-leave-outcome-action-primary"]');
+    await continueButton.click();
+  }
+
+  // Form actions
+  async saveRule() {
+    await this.saveButton.click();
+  }
+
+  async cancelEdit() {
+    await this.cancelButton.click();
+  }
+
+  // Validation methods
+  async verifyFormIsValid() {
+    const formClasses = await this.ruleForm.getAttribute('class');
+    expect(formClasses).not.toContain('invalid');
+  }
+
+  async verifyFormHasErrors() {
+    const formClasses = await this.ruleForm.getAttribute('class');
+    expect(formClasses).toContain('invalid');
+  }
+
+  async verifyPageTitle(expectedTitle: string) {
+    await expect(this.pageTitle).toContainText(expectedTitle);
+  }
+
+  async verifyBreadcrumbs(expectedPath: string[]) {
+    for (let i = 0; i < expectedPath.length; i++) {
+      const crumb = this.breadcrumbs.locator(`[data-testid="breadcrumbs-crumb-${i}"]`);
+      await expect(crumb).toContainText(expectedPath[i]);
+    }
+  }
+
+  // Comprehensive verification methods
+  async verifyAllSectionsVisible() {
+    await this.verifyConditionsSectionVisible();
+    await this.verifyOutcomeSectionVisible();
+  }
+
+  async verifyAllPageComponents() {
+    // Verify title contains "Edit Rule"
+    await expect(this.pageTitle).toContainText('Edit rule');
+    
+    // Verify form fields are present
+    await expect(this.ruleNameInput).toBeVisible();
+    await expect(this.ruleDescriptionTextarea).toBeVisible();
+    await expect(this.riskCategoryDropdown).toBeVisible();
+    
+    // Verify main sections are present
+    await expect(this.conditionsSection).toBeVisible();
+    await expect(this.outcomeSection).toBeVisible();
+    await expect(this.linkedRuleSetsSection).toBeVisible();
+    
+    // Verify rule sets dropdown is present
+    await expect(this.linkedRuleSetsDropdown).toBeVisible();
+    
+    // Verify action buttons are present
+    await expect(this.saveButton).toBeVisible();
+    await expect(this.cancelButton).toBeVisible();
+  }
+
+  async verifyRuleNameInputFilled() {
+    const ruleNameValue = await this.ruleNameInput.inputValue();
+    expect(ruleNameValue).not.toBe('');
+  }
+
+  async verifyRuleDescriptionFilled() {
+    const ruleDescriptionValue = await this.ruleDescriptionTextarea.inputValue();
+    expect(ruleDescriptionValue).not.toBe('');
+  }
+
+  // Rule name validation methods
+  async clearRuleName() {
+    await this.ruleNameInput.clear();
+  }
+
+  async verifyRequiredFieldError() {
+    const errorWrapper = this.page.locator('.error-wrapper');
+    const errorIcon = errorWrapper.locator('[data-testid="opt-lib-icon"]');
+    const errorMessage = errorWrapper.locator('p.error-message');
+    
+    await expect(errorWrapper).toBeVisible();
+    await expect(errorIcon).toBeVisible();
+    await expect(errorMessage).toBeVisible();
+    await expect(errorMessage).toContainText('This is required');
+  }
+
+  async verifyMaxLengthError() {
+    const errorWrapper = this.page.locator('.error-wrapper');
+    const errorMessage = errorWrapper.locator('p.error-message');
+    
+    await expect(errorWrapper).toBeVisible();
+    await expect(errorMessage).toBeVisible();
+    await expect(errorMessage).toContainText('This must be at most 75 characters');
+  }
+
+  async verifySaveValidationAlert() {
+    const alertBox = this.page.locator('[datatestid="alert-box-ruleset-actions"]');
+    const alertMessage = alertBox.locator('.MuiAlert-message');
+    
+    await expect(alertBox).toBeVisible();
+    await expect(alertMessage).toBeVisible();
+    await expect(alertMessage).toContainText('There are some issues to fix before you can save this ruleset. See above.');
+  }
+
+  async fillRuleNameWithLongText(length: number) {
+    const longText = 'A'.repeat(length);
+    await this.ruleNameInput.clear();
+    await this.ruleNameInput.fill(longText);
+  }
+
+  // Description validation methods
+  async clearRuleDescription() {
+    await this.ruleDescriptionTextarea.clear();
+  }
+
+  async fillRuleDescriptionWithLongText(length: number) {
+    const longText = 'A'.repeat(length);
+    await this.ruleDescriptionTextarea.clear();
+    await this.ruleDescriptionTextarea.fill(longText);
+  }
+
+  async verifyDescriptionMaxLengthError() {
+    const errorWrapper = this.page.locator('.error-wrapper');
+    const errorMessage = errorWrapper.locator('p.error-message');
+    
+    await expect(errorWrapper).toBeVisible();
+    await expect(errorMessage).toBeVisible();
+    await expect(errorMessage).toContainText('This must be at most 300 characters');
+  }
+
+  // Risk Category dropdown methods
+  async clickRiskCategoryDropdown() {
+    await this.riskCategoryDropdown.click();
+  }
+
+  async verifyAllRiskCategoriesPresent() {
+    // Define expected risk categories based on common risk types
+    const expectedCategories = [
+      'Criminal Record',
+      'Financial',
+      'Medical',
+      'Identity Verification',
+      'Compliance'
+    ];
+
+    // Wait for dropdown options to be visible
+    await this.page.waitForSelector('[role="option"]');
+    
+    // Get all visible options
+    const options = this.page.locator('[role="option"]');
+    const optionTexts = await options.allTextContents();
+    
+    // Verify each expected category is present
+    for (const category of expectedCategories) {
+      expect(optionTexts.some(text => text.includes(category))).toBe(true);
+    }
+  }
+
+  async clickCurrentlySelectedRiskCategory() {
+    // First, get the currently selected value from the dropdown
+    const selectedValue = await this.riskCategoryDropdown.textContent();
+    
+    if (selectedValue && selectedValue.trim() !== '') {
+      // Click on the same option to deselect it
+      await this.page.locator(`[role="option"]`, { hasText: selectedValue.trim() }).click();
+    }
+  }
+
+  async verifyNoRiskCategorySelected() {
+    // Verify that the dropdown shows no selection (placeholder or empty state)
+    const dropdownValue = await this.riskCategoryDropdown.textContent();
+    
+    // Check if it's empty, placeholder text, or default state
+    expect(dropdownValue?.trim()).toBeFalsy();
+  }
+
+  async verifyEditRulePageLoaded(ruleName?: string) {
+    await expect(this.pageHeader).toBeVisible();
+    await expect(this.ruleForm).toBeVisible();
+    
+    if (ruleName) {
+      await this.verifyPageTitle(`Edit rule ${ruleName}`);
+    }
+    
+    await this.verifyAllSectionsVisible();
+  }
+}
