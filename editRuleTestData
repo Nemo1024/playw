@@ -1,0 +1,121 @@
+// Test data constants for edit rule page tests
+export const EDIT_RULE_TEST_DATA = {
+  // Rule basic information
+  RULE_NAMES: {
+    BASIC: 'Test Rule Basic',
+    COMPLEX: 'Test Rule Complex',
+    WITH_CONDITIONS: 'Test Rule with Conditions',
+    WITH_OUTCOMES: 'Test Rule with Outcomes',
+    COMPLETE: 'Test Complete Rule'
+  },
+
+  // Rule descriptions
+  DESCRIPTIONS: {
+    BASIC: 'Basic test rule description',
+    COMPLEX: 'Complex test rule with multiple conditions and outcomes',
+    CRIMINAL_RECORD: 'Rule for checking criminal record violations'
+  },
+
+  // Risk categories
+  RISK_CATEGORIES: {
+    CRIMINAL_RECORD: 'Criminal Record',
+    FINANCIAL: 'Financial',
+    MEDICAL: 'Medical',
+    EMPLOYMENT: 'Employment'
+  },
+
+  // Logic operators
+  LOGIC_OPERATORS: {
+    ALL: 'All',
+    ANY: 'Any'
+  },
+
+  // Condition properties
+  CONDITION_PROPERTIES: {
+    CRIMINAL_CONVICTION: 'policy.Insured criminally convicted',
+    AGE: 'policy.Insured age',
+    INCOME: 'policy.Insured income',
+    EMPLOYMENT_STATUS: 'policy.Insured employment status'
+  },
+
+  // Condition operators
+  CONDITION_OPERATORS: {
+    EQUALS: 'equals',
+    NOT_EQUALS: 'not equals',
+    GREATER_THAN: 'greater than',
+    LESS_THAN: 'less than',
+    CONTAINS: 'contains',
+    NOT_CONTAINS: 'not contains'
+  },
+
+  // Condition values
+  CONDITION_VALUES: {
+    TRUE: 'true',
+    FALSE: 'false',
+    YES: 'Yes',
+    NO: 'No',
+    EMPLOYED: 'Employed',
+    UNEMPLOYED: 'Unemployed',
+    AGE_25: '25',
+    AGE_65: '65',
+    INCOME_50K: '50000'
+  },
+
+  // Sample conditions for testing
+  SAMPLE_CONDITIONS: [
+    {
+      property: 'policy.Insured criminally convicted',
+      operator: 'equals',
+      value: 'true'
+    },
+    {
+      property: 'policy.Insured age',
+      operator: 'greater than',
+      value: '65'
+    },
+    {
+      property: 'policy.Insured employment status',
+      operator: 'equals',
+      value: 'Unemployed'
+    }
+  ],
+
+  // Available outcomes (from the HTML structure)
+  AVAILABLE_OUTCOMES: [
+    'sadcs',
+    'Test Outcome for Drag Drop Existing',
+    'Test Outcome for Empty Name Validation',
+    'Test Outcome for Adding Output',
+    'Test Outcome for Minimum Validation',
+    'Test Outcome for Editing Output',
+    'Test Outcome for Edit Components',
+    'Test Outcome for Deleting Output',
+    'STP'
+  ],
+
+  // Sample outcome selections for testing
+  OUTCOME_SELECTIONS: {
+    SINGLE: ['sadcs'],
+    MULTIPLE: ['sadcs', 'STP'],
+    COMPLEX: ['Test Outcome for Adding Output', 'Test Outcome for Editing Output', 'STP']
+  },
+
+  // Breadcrumb paths
+  BREADCRUMB_PATHS: {
+    EDIT_RULE: ['Rules', 'Edit rule']
+  },
+
+  // Form validation messages
+  VALIDATION_MESSAGES: {
+    REQUIRED_FIELD: 'This field is required',
+    INVALID_VALUE: 'Invalid value',
+    DUPLICATE_NAME: 'Rule name already exists'
+  },
+
+  // Navigation URLs
+  URLS: {
+    RULES_LIST: '/rules',
+    NEW_RULE: '/rules/new',
+    EDIT_RULE: (id: string) => `/rules/${id}/edit`
+  }
+};
