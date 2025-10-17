@@ -1,0 +1,602 @@
+# Decision Table Test Cases
+
+Based on the updated acceptance criteria, here are the comprehensive test cases for the Decision Table functionality.
+
+## Test Case 1: Verify Default State of Decision Table
+
+**Description:** Verify that the decision table displays correctly in its initial empty state based on actual HTML structure.
+
+**Test Steps:**
+1. **Test Step:** Navigate to the decision table page
+   **Test Result:** Decision table page loads with "Decision table" section visible
+
+2. **Test Step:** Verify the decision grid shows headers for "Inputs" and "Outcomes"
+   **Test Result:** Grid headers are displayed with respective titles
+
+3. **Test Step:** Check that "Add input" button is visible under Inputs header
+   **Test Result:** "Add input" button with plus icon is displayed and clickable
+
+4. **Test Step:** Check that "Add outcome" button is visible under Outcomes header
+   **Test Result:** "Add outcome" button with plus icon is displayed and clickable
+
+5. **Test Step:** Verify "Add row" button is present in the grid body
+   **Test Result:** "Add row" button is visible in the decision grid body
+
+6. **Test Step:** Verify "If no rows match" default row is present
+   **Test Result:** Default row with "If no rows match" text is visible at bottom of grid
+
+7. **Test Step:** Verify save button is present but disabled
+   **Test Result:** Save button is visible in form footer but disabled state
+
+---
+
+## Test Case 2: Add Single Input Column
+
+**Description:** Verify that clicking "Add input" opens the data property selector and allows adding an input column.
+
+**Test Steps:**
+1. **Test Step:** Click the "Add input" button
+   **Test Result:** Data property selector component opens in a popover
+
+2. **Test Step:** Select a data property from the selector
+   **Test Result:** Selected property is added as an input column to the decision table
+
+3. **Test Step:** Verify the input column appears with operator and value fields
+   **Test Result:** New column shows with dropdown for operator and input field for value
+
+4. **Test Step:** Verify "Add input" button is still enabled
+   **Test Result:** "Add input" button remains clickable (since only 1 of 3 max inputs added)
+
+---
+
+## Test Case 3: Add Maximum Input Columns (3)
+
+**Description:** Verify the system enforces the maximum limit of 3 input columns and disables the "Add input" button accordingly.
+
+**Test Steps:**
+1. **Test Step:** Add first input column by clicking "Add input" and selecting a property
+   **Test Result:** First input column is added successfully
+
+2. **Test Step:** Add second input column by clicking "Add input" and selecting another property
+   **Test Result:** Second input column is added successfully
+
+3. **Test Step:** Add third input column by clicking "Add input" and selecting another property
+   **Test Result:** Third input column is added successfully
+
+4. **Test Step:** Verify "Add input" button becomes disabled
+   **Test Result:** "Add input" button is disabled and not clickable
+
+5. **Test Step:** Verify all 3 input columns are displayed
+   **Test Result:** Decision table shows exactly 3 input columns with their respective fields
+
+---
+
+## Test Case 4: Remove Input Column
+
+**Description:** Verify that input columns can be removed using the X button and the "Add input" button becomes enabled again.
+
+**Test Steps:**
+1. **Test Step:** Add 3 input columns to reach the maximum limit
+   **Test Result:** 3 input columns are present and "Add input" button is disabled
+
+2. **Test Step:** Click the X button on any input column
+   **Test Result:** Selected input column is removed from the table
+
+3. **Test Step:** Verify "Add input" button becomes enabled again
+   **Test Result:** "Add input" button is clickable again
+
+4. **Test Step:** Verify the remaining columns maintain their configuration
+   **Test Result:** Other input columns retain their operator and value settings
+
+---
+
+## Test Case 5: Input Column Validation - Complete Configuration Required
+
+**Description:** Verify that input columns must be fully completed with both operator and value, and error states are shown for incomplete columns.
+
+**Test Steps:**
+1. **Test Step:** Add an input column
+   **Test Result:** Input column is added with operator dropdown and value field
+
+2. **Test Step:** Leave both operator and value empty
+   **Test Result:** Column shows incomplete state (error state visible)
+
+3. **Test Step:** Select operator but leave value empty
+   **Test Result:** Column still shows incomplete state
+
+4. **Test Step:** Add value but leave operator empty
+   **Test Result:** Column still shows incomplete state
+
+5. **Test Step:** Complete both operator and value
+   **Test Result:** Column shows complete state, error state is cleared
+
+---
+
+## Test Case 6: Add First Row to Decision Table
+
+**Description:** Verify that clicking "Add row" creates a new row across all input columns.
+
+**Test Steps:**
+1. **Test Step:** Add at least one input column
+   **Test Result:** Input column is present in the table
+
+2. **Test Step:** Click "Add row" button
+   **Test Result:** A new empty row is added spanning all input columns
+
+3. **Test Step:** Verify row contains input fields for each column
+   **Test Result:** Each input column has an empty field in the new row
+
+---
+
+## Test Case 7: Row Options Menu Functionality
+
+**Description:** Verify the row options menu provides correct options and functionality based on updated acceptance criteria.
+
+**Test Steps:**
+1. **Test Step:** Add at least one input column and one row
+   **Test Result:** Decision table has input columns and at least one row
+
+2. **Test Step:** Access the row options menu for the row
+   **Test Result:** Row options menu opens showing available actions
+
+3. **Test Step:** Verify "Edit details" option is present
+   **Test Result:** "Edit details" option is visible in the menu
+
+4. **Test Step:** Verify "Duplicate row" option is present
+   **Test Result:** "Duplicate row" option is visible in the menu
+
+5. **Test Step:** Verify "Add row above" option is present
+   **Test Result:** "Add row above" option is visible in the menu
+
+6. **Test Step:** Verify "Add row below" option is present
+   **Test Result:** "Add row below" option is visible in the menu
+
+7. **Test Step:** Verify "Delete row" option is present
+   **Test Result:** "Delete row" option is visible in the menu
+
+---
+
+## Test Case 8: Edit Details from Row Options Menu
+
+**Description:** Verify that "Edit details" from the row options menu opens the drawer with correct row information.
+
+**Test Steps:**
+1. **Test Step:** Create a decision table with input columns, outcomes, and populated rows
+   **Test Result:** Decision table has complete configuration with data
+
+2. **Test Step:** Select "Edit details" from row options menu for a specific row
+   **Test Result:** Drawer opens with the title showing the row name (e.g., "Row 1")
+
+3. **Test Step:** Verify the corresponding row is highlighted in the table
+   **Test Result:** Selected row is visually highlighted or emphasized
+
+4. **Test Step:** Verify drawer shows inputs with values and operators
+   **Test Result:** Drawer displays all input fields with their configured values and operators
+
+5. **Test Step:** Verify drawer shows outcomes with output dropdowns
+   **Test Result:** Drawer displays all outcome fields with dropdown selections
+
+---
+
+## Test Case 9: Duplicate Row Functionality
+
+**Description:** Verify that "Duplicate row" creates an exact copy of the selected row with all its data.
+
+**Test Steps:**
+1. **Test Step:** Create a decision table with input columns, outcome columns, and a populated row
+   **Test Result:** Decision table has a row with complete input and outcome data
+
+2. **Test Step:** Select "Duplicate row" from row options menu
+   **Test Result:** A new row is created with identical data to the original row
+
+3. **Test Step:** Verify the duplicated row appears below the original row
+   **Test Result:** New row is positioned directly below the source row
+
+4. **Test Step:** Verify all input values and operators are copied
+   **Test Result:** Duplicated row has same input values and operators as original
+
+5. **Test Step:** Verify all outcome selections are copied
+   **Test Result:** Duplicated row has same outcome selections as original
+
+6. **Test Step:** Modify values in the duplicated row
+   **Test Result:** Changes to duplicated row don't affect the original row
+
+---
+
+## Test Case 10: Add Row Above Functionality
+
+**Description:** Verify that "Add row above" creates a new empty row in the correct position.
+
+**Test Steps:**
+1. **Test Step:** Create a decision table with input columns and multiple rows with data
+   **Test Result:** Decision table has multiple populated rows
+
+2. **Test Step:** Select "Add row above" from row options menu for the second row
+   **Test Result:** A new empty row is inserted above the selected row
+
+3. **Test Step:** Verify the new row is positioned correctly
+   **Test Result:** New row appears between the first and second row (now third)
+
+4. **Test Step:** Verify existing rows maintain their data
+   **Test Result:** All other rows retain their original data and positions
+
+---
+
+## Test Case 11: Add Row Below Functionality
+
+**Description:** Verify that "Add row below" creates a new empty row in the correct position.
+
+**Test Steps:**
+1. **Test Step:** Create a decision table with input columns and multiple rows with data
+   **Test Result:** Decision table has multiple populated rows
+
+2. **Test Step:** Select "Add row below" from row options menu for the first row
+   **Test Result:** A new empty row is inserted below the selected row
+
+3. **Test Step:** Verify the new row is positioned correctly
+   **Test Result:** New row appears between the first and second row
+
+4. **Test Step:** Verify existing rows maintain their data and shift positions accordingly
+   **Test Result:** All other rows retain their data with updated positions
+
+---
+
+## Test Case 12: Delete Row Functionality
+
+**Description:** Verify that "Delete row" removes the selected row from the decision table.
+
+**Test Steps:**
+1. **Test Step:** Create a decision table with input columns and multiple rows with data
+   **Test Result:** Decision table has multiple populated rows
+
+2. **Test Step:** Select "Delete row" from row options menu for a middle row
+   **Test Result:** Selected row is removed from the decision table
+
+3. **Test Step:** Verify remaining rows maintain their data
+   **Test Result:** Other rows retain their data and adjust positions accordingly
+
+4. **Test Step:** Verify row count decreases by one
+   **Test Result:** Total number of rows is reduced by one
+
+---
+
+## Test Case 13: Add Single Outcome
+
+**Description:** Verify that clicking "Add outcome" displays available outcomes and allows selection.
+
+**Test Steps:**
+1. **Test Step:** Click "Add outcome" button
+   **Test Result:** List of possible outcomes is displayed
+
+2. **Test Step:** Select one outcome from the list
+   **Test Result:** Selected outcome is added to the decision table
+
+3. **Test Step:** Verify outcome column appears in the table
+   **Test Result:** New outcome column is visible with dropdown fields for each row
+
+4. **Test Step:** Verify outcome dropdowns are mandatory for each row
+   **Test Result:** Each row shows a dropdown for the selected outcome that requires selection
+
+---
+
+## Test Case 14: Add Multiple Outcomes
+
+**Description:** Verify that multiple outcomes can be selected and added to the decision table.
+
+**Test Steps:**
+1. **Test Step:** Click "Add outcome" and select first outcome
+   **Test Result:** First outcome column is added to the table
+
+2. **Test Step:** Click "Add outcome" again and select second outcome
+   **Test Result:** Second outcome column is added to the table
+
+3. **Test Step:** Verify both outcome columns are present
+   **Test Result:** Decision table shows both outcome columns with their respective dropdowns
+
+4. **Test Step:** Verify each row has dropdowns for both outcomes
+   **Test Result:** Each row contains dropdown fields for all selected outcomes
+
+---
+
+## Test Case 15: Outcome Dropdown Selection
+
+**Description:** Verify that outcome dropdowns in each row can be populated with appropriate values.
+
+**Test Steps:**
+1. **Test Step:** Add at least one outcome column and one row
+   **Test Result:** Row contains dropdown field for the outcome
+
+2. **Test Step:** Click on the outcome dropdown in the row
+   **Test Result:** Dropdown opens showing available output values for the outcome
+
+3. **Test Step:** Select a value from the dropdown
+   **Test Result:** Selected value is displayed in the outcome field
+
+4. **Test Step:** Verify selection is saved
+   **Test Result:** Selected value remains in the field after clicking elsewhere
+
+---
+
+## Test Case 16: Edit Details Drawer - Open and Display
+
+**Description:** Verify that clicking "Edit details" for a row opens the drawer with correct information.
+
+**Test Steps:**
+1. **Test Step:** Create a decision table with input columns, outcomes, and populated rows
+   **Test Result:** Decision table has complete configuration with data
+
+2. **Test Step:** Click "Edit details" button for a specific row
+   **Test Result:** Drawer opens with the title showing the row name
+
+3. **Test Step:** Verify the corresponding row is highlighted in the table
+   **Test Result:** Selected row is visually highlighted or emphasized
+
+4. **Test Step:** Verify drawer shows inputs with values and operators
+   **Test Result:** Drawer displays all input fields with their configured values and operators
+
+5. **Test Step:** Verify drawer shows outcomes with output dropdowns
+   **Test Result:** Drawer displays all outcome fields with dropdown selections
+
+---
+
+## Test Case 17: Edit Details Drawer - Risk Class Functionality
+
+**Description:** Verify the risk class checkbox and dropdown functionality in the edit details drawer.
+
+**Test Steps:**
+1. **Test Step:** Open edit details drawer for a row
+   **Test Result:** Drawer opens with row configuration displayed
+
+2. **Test Step:** Verify risk class checkbox is present
+   **Test Result:** Risk class checkbox is visible in the drawer
+
+3. **Test Step:** Check the risk class checkbox
+   **Test Result:** Risk class checkbox becomes checked/enabled
+
+4. **Test Step:** Verify risk class dropdown appears when checkbox is enabled
+   **Test Result:** Risk class dropdown becomes visible and accessible
+
+5. **Test Step:** Select a value from the risk class dropdown
+   **Test Result:** Selected risk class value is displayed
+
+6. **Test Step:** Uncheck the risk class checkbox
+   **Test Result:** Risk class dropdown is hidden and value is cleared
+
+---
+
+## Test Case 18: Edit Details Drawer - Message Field
+
+**Description:** Verify the message input field functionality in the edit details drawer.
+
+**Test Steps:**
+1. **Test Step:** Open edit details drawer for a row
+   **Test Result:** Drawer opens with row configuration
+
+2. **Test Step:** Verify message input field is present
+   **Test Result:** Message input field is visible in the drawer
+
+3. **Test Step:** Enter text in the message field
+   **Test Result:** Text is accepted and displayed in the message field
+
+4. **Test Step:** Clear the message field
+   **Test Result:** Message field becomes empty (field is optional)
+
+---
+
+## Test Case 19: Edit Details Drawer - Navigation Between Rows
+
+**Description:** Verify the "Next row" and "Previous row" button functionality in the edit details drawer.
+
+**Test Steps:**
+1. **Test Step:** Create multiple rows in the decision table
+   **Test Result:** Decision table has multiple rows with data
+
+2. **Test Step:** Open edit details drawer for the first row
+   **Test Result:** Drawer opens showing first row details
+
+3. **Test Step:** Verify "Next row" button is present and clickable
+   **Test Result:** "Next row" button is visible and enabled
+
+4. **Test Step:** Verify "Previous row" button state for first row
+   **Test Result:** "Previous row" button should be disabled or not visible
+
+5. **Test Step:** Click "Next row" button
+   **Test Result:** Drawer updates to show the second row details
+
+6. **Test Step:** Navigate to the last row using "Next row"
+   **Test Result:** Drawer shows the last row details
+
+7. **Test Step:** Verify "Next row" button state on last row
+   **Test Result:** "Next row" button is disabled or not visible
+
+8. **Test Step:** Click "Previous row" button from last row
+   **Test Result:** Drawer updates to show the previous row details
+
+---
+
+## Test Case 20: Error States - Input Validation at Save
+
+**Description:** Verify that error states are triggered when attempting to save with incomplete input fields (operator or value missing).
+
+**Test Steps:**
+1. **Test Step:** Create a decision table with input columns and add a row
+   **Test Result:** Row is created with empty input fields
+
+2. **Test Step:** Fill operator but leave value field empty for an input
+   **Test Result:** Input field remains empty, no immediate error shown
+
+3. **Test Step:** Attempt to save the rule
+   **Test Result:** Error state is triggered indicating incomplete input fields
+
+4. **Test Step:** Fill value but leave operator field empty for an input
+   **Test Result:** Operator field remains empty, no immediate error shown
+
+5. **Test Step:** Attempt to save the rule again
+   **Test Result:** Error state is triggered indicating incomplete input fields
+
+6. **Test Step:** Complete both operator and value for all inputs
+   **Test Result:** Input validation errors are cleared
+
+---
+
+## Test Case 21: Error States - Outcome Validation at Save
+
+**Description:** Verify that error states are triggered when attempting to save with empty outcome fields.
+
+**Test Steps:**
+1. **Test Step:** Create a decision table with input columns, outcome columns, and add a row
+   **Test Result:** Row is created with empty outcome dropdowns
+
+2. **Test Step:** Complete all input fields but leave outcome fields empty
+   **Test Result:** Outcome dropdowns remain unselected, no immediate error shown
+
+3. **Test Step:** Attempt to save the rule
+   **Test Result:** Error state is triggered indicating incomplete outcome fields
+
+4. **Test Step:** Select values for all outcome dropdowns
+   **Test Result:** Outcome validation errors are cleared
+
+5. **Test Step:** Save the rule
+   **Test Result:** Rule saves successfully without validation errors
+
+---
+
+## Test Case 22: Save Button Functionality
+
+**Description:** Verify the save button behavior in different states of the decision table configuration.
+
+**Test Steps:**
+1. **Test Step:** Navigate to decision table page with empty configuration
+   **Test Result:** Save button is present but disabled
+
+2. **Test Step:** Add rule name in basics section
+   **Test Result:** Save button remains disabled (decision table not configured)
+
+3. **Test Step:** Add at least one input column and one outcome column
+   **Test Result:** Save button remains disabled (no rows configured)
+
+4. **Test Step:** Add one row and populate all required fields
+   **Test Result:** Save button becomes enabled
+
+5. **Test Step:** Click the enabled save button
+   **Test Result:** Rule is saved successfully and user is redirected appropriately
+
+---
+
+## Test Case 23: Default Row "If no rows match"
+
+**Description:** Verify the default row behavior and configuration in the decision table.
+
+**Test Steps:**
+1. **Test Step:** Navigate to empty decision table
+   **Test Result:** "If no rows match" default row is visible at the bottom
+
+2. **Test Step:** Add input columns
+   **Test Result:** "If no rows match" row does not show input fields (only outcomes)
+
+3. **Test Step:** Add outcome columns
+   **Test Result:** "If no rows match" row shows outcome dropdown fields
+
+4. **Test Step:** Configure outcomes for the default row
+   **Test Result:** Default row outcomes can be set independently from regular rows
+
+5. **Test Step:** Add regular rows above the default row
+   **Test Result:** "If no rows match" row remains at the bottom regardless of other rows
+
+---
+
+## Test Case 24: Data Property Selector Integration
+
+**Description:** Verify the data property selector popover opens and allows property selection without validation of the selector itself.
+
+**Test Steps:**
+1. **Test Step:** Click "Add input" button
+   **Test Result:** Data property selector popover opens with tabs and search functionality
+
+2. **Test Step:** Verify tabs are present (e.g., "Part 1", "Labs")
+   **Test Result:** Tabs are visible and clickable in the selector
+
+3. **Test Step:** Select any available data property from the list
+   **Test Result:** Selected property is added as input column and popover closes
+
+4. **Test Step:** Verify input column shows the selected property name
+   **Test Result:** Column header displays the selected data property name
+
+---
+
+## Test Case 25: Row Naming and Indexing
+
+**Description:** Verify that rows are automatically named as "Row 1", "Row 2", etc., and displayed correctly in the edit drawer.
+
+**Test Steps:**
+1. **Test Step:** Add input columns and create first row
+   **Test Result:** First row is created and can be identified as "Row 1"
+
+2. **Test Step:** Add second row
+   **Test Result:** Second row is created and can be identified as "Row 2"
+
+3. **Test Step:** Open edit details for first row
+   **Test Result:** Drawer opens with title showing "Row 1"
+
+4. **Test Step:** Navigate to second row using "Next row" button
+   **Test Result:** Drawer title updates to show "Row 2"
+
+5. **Test Step:** Delete first row and verify renaming
+   **Test Result:** Former "Row 2" becomes "Row 1" (automatic renumbering)
+
+---
+
+## Test Case 26: Complete Decision Table Workflow
+
+**Description:** Verify end-to-end workflow of creating a complete decision table with inputs, outcomes, and populated rows.
+
+**Test Steps:**
+1. **Test Step:** Start with empty decision table
+   **Test Result:** Decision table is in default empty state
+
+2. **Test Step:** Add 2 input columns with different data properties
+   **Test Result:** Two input columns are added successfully
+
+3. **Test Step:** Configure operators and values for both input columns
+   **Test Result:** Input columns are properly configured without errors
+
+4. **Test Step:** Add 2 different outcomes
+   **Test Result:** Two outcome columns are added to the table
+
+5. **Test Step:** Create 3 rows in the decision table
+   **Test Result:** Three rows are present across all columns
+
+6. **Test Step:** Populate all input fields in all rows with valid data
+   **Test Result:** All rows have complete input data without validation errors
+
+7. **Test Step:** Select outcome values for all rows and outcomes
+   **Test Result:** All outcome dropdowns are populated with selections
+
+8. **Test Step:** Open edit details for middle row and configure risk class and message
+   **Test Result:** Row details are configured with additional options
+
+9. **Test Step:** Verify complete decision table functionality
+   **Test Result:** Decision table is fully functional with all features working correctly
+
+---
+
+## Summary of Changes Based on Updated Acceptance Criteria:
+
+### **Added Test Cases:**
+- **Test Case 8:** Edit Details from Row Options Menu (new requirement)
+- **Test Case 9:** Duplicate Row Functionality (new requirement)
+- **Test Case 20:** Error States - Input Validation at Save (new section 6)
+- **Test Case 21:** Error States - Outcome Validation at Save (new section 6)
+
+### **Updated Requirements:**
+- **Row Options Menu** now includes 5 options: Edit details, Duplicate row, Add row above, Add row below, Delete row
+- **Error States** are triggered at save time, not real-time validation
+- **Input validation** specifically checks for missing operator OR value
+- **Outcome validation** ensures all outcome fields are populated before save
+
+### **Key Implementation Notes:**
+- No validation required for data property selector component (out of scope)
+- Rows automatically named "Row 1", "Row 2", etc.
+- Generic outcome types acceptable for testing
+- Save button behavior tied to completion status
+- "If no rows match" default row always present at bottom
